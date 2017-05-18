@@ -1,0 +1,138 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/Layout.xhtml">
+
+	<ui:define name="content">
+
+		<!--Para dar override no css do primefaces!-->
+		<h:outputStylesheet library="sisorcamento" name="styles/style.css" />
+
+		<h1 class="sis-titulo-pagina">Orçamento</h1>
+
+		<h:form id="principaisAcoes">
+			<div class="ui-grid-col-10">
+				<p:commandButton class="btn_cad" icon="fa  fa-plus pull-left"
+					value="Realizar orçamento"
+					onclick="PF('realizar_orcamento').show();" />
+
+			</div>
+		</h:form>
+
+		<p:spacer width="100" height="10" />
+
+		<h:form id="lista_dizimo">
+			<p:messages autoUpdate="false" />
+			<p:growl autoUpdate="false" />
+
+			<div class="ui-grid ui-grid-responsive" style="margin-top: 20px;">
+				<div class="ui-grid-row">
+					<div class="ui-grid-col-12">
+						<p:inputText style="width: 100%" id="filtro"
+							placeholder="Digite o nome de algum cliente..." />
+					</div>
+					<div class="ui-grid-col-1" style="padding-left: 20px;">
+
+						<p:commandButton value="Filtrar" process="@this filtro"
+							update="@form" />
+
+					</div>
+				</div>
+			</div>
+
+			<p:dataTable id="orcamento-table" var="orc" reflow="true"
+				style="text-align: center;"
+				emptyMessage="Nenhum cliente encontrado!">
+
+				<p:column headerText="Cod" style="width: 100px;">
+					<h:outputText />
+				</p:column>
+
+				<p:column headerText="Nome do Cliente" style="width: 500px;">
+					<h:outputText />
+				</p:column>
+
+				<p:column headerText="CPF">
+					<h:outputText />
+				</p:column>
+
+
+				<p:column style="width: 20px;">
+					<f:facet name="header">
+						<i class="fa fa-pencil"></i>
+					</f:facet>
+					<p:commandLink immediate="true" process="@this" update="@form">
+						<i class="fa fa-pencil"></i>
+					</p:commandLink>
+				</p:column>
+
+				<p:column style="width: 20px;">
+					<f:facet name="header">
+						<i class="fa fa-trash"></i>
+					</f:facet>
+					<p:commandLink immediate="true" process="@this" update="@form">
+						<i class="fa fa-trash"></i>
+						<p:confirm header="Confirmação de Exclusão"
+							message="Você tem certeza que quer excluir esse aluno?"
+							icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+
+			</p:dataTable>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				appendTo="@(body)">
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+
+			</p:confirmDialog>
+		</h:form>
+
+		<!-- Modal para o cadastro de orçamento -->
+
+		<p:dialog header="Realizando orçamento" widgetVar="realizar_orcamento"
+			modal="true" width="600" height="250" responsive="true">
+
+			<!-- Wizards divididos em modulos -->
+			<h:form id="cadastro_orcamentos">
+
+				<p:messages autoUpdate="false" />
+				<p:growl id="growl" sticky="true" showDetail="true" />
+				<p:panel>
+					<p:messages />
+					<div class="ui-fluid">
+
+						<p:panelGrid id="panel-grid-orcamento" columns="4" layout="grid"
+							style="margin-top: 20px" styleClass="panelgrid-noborder"
+							columnClasses="ui-grid-col-2, ui-grid-col-4,ui-grid-col-2, ui-grid-col-4">
+
+							<p:outputLabel value="Código" />
+							<p:inputText disabled="true" />
+
+							<p:outputLabel value="Nome" for="nome" />
+							<p:inputText id="nome" />
+
+							<p:outputLabel value="CPF" for="cpf" />
+							<p:inputMask id="cpf" mask="999.999.999-99" />
+
+						</p:panelGrid>
+						<p:toolbar style="margin-top: 20px; margin-bottom: 10px">
+							<p:toolbarGroup>
+
+								<p:commandButton value="Salvar" process="@this" update="growl"
+									icon="ui-icon-disk"/>
+							</p:toolbarGroup>
+						</p:toolbar>
+					</div>
+				</p:panel>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>
